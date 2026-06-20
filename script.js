@@ -89,7 +89,7 @@ async function startChecking() {
 
             if (data.status === 'success') {
                 const res = data.result;
-                const tds = (data.details && data.details.3ds_status) || 'unknown';
+                const tds = (data.details && data.details['3ds_status']) || 'unknown';
                 message = `${res} (${tds})`;
                 
                 if (res === 'VBV APPROVED' || res === 'CHALLENGE REQUIRED') {
