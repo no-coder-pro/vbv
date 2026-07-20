@@ -1,5 +1,5 @@
 const API_BASE_URL = 'https://vbv.bbinl.eu.cc';
-const API_PATH = '/api/vbv4';
+const API_PATH = '/api/vbv6';
 
 const checkBtn = document.getElementById('check-btn');
 const stopCheckBtn = document.getElementById('stop-check-btn');
